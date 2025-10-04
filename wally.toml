@@ -1,5 +1,5 @@
 [package]
-name = "Sovvie/chemical-wuye"
+name = "sovvie/chemical-wuye"
 authors = ["Sovereignty email@sov.gg"]
 version = "0.3.0"
 license = "MIT" # Optional, but good practice
@@ -12,6 +12,7 @@ content_root = "package"
 # shared-packages = "game.ReplicatedStorage.Packages"
 
 # [dependencies]
+# Chemical = "sovvie/chemical-wuye@0.3.0"
 # Promise = "evaera/promise@4.0.0"
 # Sift = "csqrl/sift@0.0.11"
 # # Spark = "nezuo/spark@0.3.1"

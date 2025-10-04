@@ -1,5 +1,5 @@
 {
-  "name": "Chemical/Wuye",
+  "name": "sovvie/chemical-wuye",
   "tree": {
     "$className": "DataModel",
 
@@ -9,6 +9,28 @@
         "Chemical": {
           "$path": "package"
         }
+      },
+
+      "Client": {
+        "$path": "src/client"
+      }
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Runtime": {
+          "$path": "src/runtime.client.lua"
+        }
+      }
+    },
+
+    "ServerScriptService": {
+      "Server": {
+        "$path": "src/server"
+      },
+
+      "Runtime": {
+        "$path": "src/runtime.server.lua"
       }
     },
 
