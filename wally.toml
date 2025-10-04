@@ -1,31 +1,32 @@
 [package]
-name = "sovvie/chemical-wuye"
-version = "0.3.0"
-registry = "https://github.com/UpliftGames/wally-index"
-realm = "shared"
-description = "Reactive state library built with ECS."
+name = "Sovvie/chemical-wuye"
 authors = ["Sovereignty email@sov.gg"]
+version = "0.3.0"
 license = "MIT" # Optional, but good practice
+realm = "shared"
+registry = "https://github.com/UpliftGames/wally-index"
+description = "A reactive state library built with ECS."
+content_root = "package"
 
-[place]
-shared-packages = "game.ReplicatedStorage.Packages"
+# [place]
+# shared-packages = "game.ReplicatedStorage.Packages"
 
-[dependencies]
-Promise = "evaera/promise@4.0.0"
-Sift = "csqrl/sift@0.0.11"
-# Spark = "nezuo/spark@0.3.1"
-# Cmdr = "evaera/cmdr@1.12.0"
-t = "osyrisrblx/t@3.1.1"
-TopBarPlus = "legitatx/topbarplus@3.0.5"
-# DeltaCompress = "nezuo/delta-compress@0.1.3"
-# QuickBounds = "unityjaeger/quickbounds@0.3.1"
-# dispense-prop = "khanpython/dispense-prop@4.3.0"
-NumberSpinner = "boatbomber/numberspinner@0.1.0"
-FunctionTween = "bdidk235/functiontween@0.1.2"
-ShiftUnlocked = "yiannis123git/shiftunlocked@2.2.0"
-ColorUtils = "csqrl/colour-utils@1.4.1"
-Ragdoll-Service = "kiy4ku/ragdoll-service@1.0.1"
-# BoatTween = "boatbomber/boattween@1.0.1"  
+# [dependencies]
+# Promise = "evaera/promise@4.0.0"
+# Sift = "csqrl/sift@0.0.11"
+# # Spark = "nezuo/spark@0.3.1"
+# # Cmdr = "evaera/cmdr@1.12.0"
+# t = "osyrisrblx/t@3.1.1"
+# TopBarPlus = "legitatx/topbarplus@3.0.5"
+# # DeltaCompress = "nezuo/delta-compress@0.1.3"
+# # QuickBounds = "unityjaeger/quickbounds@0.3.1"
+# # dispense-prop = "khanpython/dispense-prop@4.3.0"
+# NumberSpinner = "boatbomber/numberspinner@0.1.0"
+# FunctionTween = "bdidk235/functiontween@0.1.2"
+# ShiftUnlocked = "yiannis123git/shiftunlocked@2.2.0"
+# ColorUtils = "csqrl/colour-utils@1.4.1"
+# Ragdoll-Service = "kiy4ku/ragdoll-service@1.0.1"
+# # BoatTween = "boatbomber/boattween@1.0.1"  
 
-# [server-dependencies]
+# # [server-dependencies]
 # ProfileStore = "lm-loleris/profilestore@1.0.3"

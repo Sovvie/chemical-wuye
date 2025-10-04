@@ -1,6 +1,37 @@
-# Project place file
-/Chemical.rbxlx
+# General
+.DS_Store
+
+# vscode
+/.vscode/
+
+# Roblox model and place files
+/*.rbxm
+/*.rbxmx
+/*.rbxl
+/*.rbxlx
 
 # Roblox Studio lock files
-/*.rbxlx.lock
-/*.rbxl.lock
+*.rbxlx.lock
+*.rbxl.lock
+
+# Wally
+/Packages
+/ServerPackages
+/wally.lock
+
+# Sourcemap
+/sourcemap.json
+
+# Zap
+**/ClientRemotes.lua
+**/ServerRemotes.lua
+**/RemoteName.profiler.luau
+**/_ClientRemotes.lua
+**/_ServerRemotes.lua
+**/_RemoteName.profiler.luau
+
+# Rojo
+*.rbxm.lock
+*.rbxmx.lock
+*.rbxl.lock
+*.rbxlx.lock

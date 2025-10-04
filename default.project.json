@@ -4,8 +4,11 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "Chemical": {
-        "$path": "src"
+      "Packages": {
+        "$className": "Folder",
+        "Chemical": {
+          "$path": "package"
+        }
       }
     },
 

@@ -1,0 +1,17 @@
+Packages/
+_Packages/
+
+*.project.json
+*.project.json5
+*.luaurc
+.rojo-maiden.json
+
+.git/
+.gitignore
+
+wally.lock
+wally.toml
+.wallyignore
+
+.vscode/
+.idea/
