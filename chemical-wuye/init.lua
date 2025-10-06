@@ -162,15 +162,17 @@ end
 --TODO Scoped entity/metatable recycling.
 --TODO Handshake entity recycling.
 --TODO doesnt have typechecking safety checks
-local function Scoped<S>(source: Scopable<Wuye>, cheap: boolean?): Scopable<Wuye> | Scopable<any>
-	local entity = World:entity()
+local function Scoped<S>(source: S, cheap: boolean?): Scopable<S>
+	if typeof(source) ~= "table" then return error("Scoped's source must be at least of type table, preferably dict.") end
 
-	if source.entity then
-		World:add(entity, JECS.pair(Tags.InScopeOf, source.entity))
+	local entity = World:entity()
+	local sourceEntity = (source :: any)["entity"]
+	if sourceEntity then
+		World:add(entity, JECS.pair(Tags.InScopeOf, sourceEntity))
 	end
 
 	if cheap then
-		return { entity = entity }
+		return { entity = entity } :: Scopable<any>
 	else
 		World:add(entity, Tags.Scope)
 		local metatable = getmetatable(source :: any) or { __index = source }
@@ -377,7 +379,6 @@ local Wuye =  {
 	delete = Delete,
 	changed = Changed,
 	handshake = Handshake,
-	create = Create,
 
 	Scoped = Scoped,
 	State = State,
@@ -388,9 +389,6 @@ local Wuye =  {
 	Mapped = Mapped,
 
 	Select = Select,
-	Prop = Prop,
-	Method = Method,
-	Resolvable = Resolvable,
 
 	Throttle = Throttle,
 	Debounce = Debounce,

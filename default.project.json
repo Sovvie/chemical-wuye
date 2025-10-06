@@ -7,7 +7,7 @@
       "Packages": {
         "$className": "Folder",
         "Chemical": {
-          "$path": "package"
+          "$path": "chemical-wuye"
         }
       },
 
