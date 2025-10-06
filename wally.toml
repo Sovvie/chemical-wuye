@@ -1,18 +1,19 @@
 [package]
 name = "sovvie/chemical-wuye"
-authors = ["Sovereignty email@sov.gg"]
-version = "0.3.1"
+authors = ["Sovereignty <email@sov.gg>"]
+version = "0.3.2"
 license = "MIT" # Optional, but good practice
 realm = "shared"
 registry = "https://github.com/UpliftGames/wally-index"
 description = "A reactive state library built with ECS."
-content_root = "chemical-wuye"
+
+exclude = [ "src", ".gitignore", "default.project.json", "README.md", "stylua.toml", "init.meta.json", "aftman.toml" ]
 
 # [place]
 # shared-packages = "game.ReplicatedStorage.Packages"
 
 # [dependencies]
-# Chemical = "sovvie/chemical-wuye@0.3.0"
+# Chemical = "sovvie/chemical-wuye@0.3.1"
 # Promise = "evaera/promise@4.0.0"
 # Sift = "csqrl/sift@0.0.11"
 # # Spark = "nezuo/spark@0.3.1"
