@@ -10,6 +10,8 @@ local Components = {
 	Cache = JECS.component(),
 	Callback = JECS.component() :: JECS.Entity<(...any) -> ()>,
 	Cleanup = JECS.component() :: JECS.Entity<() -> ()>,
+
+	CacheTable = JECS.component() :: JECS.Entity<{ any }>,
 }
 
 

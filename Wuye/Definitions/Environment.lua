@@ -25,6 +25,14 @@ do ENV "JECS Tags"
 	World:add(Tags.InScopeOf, JECS.Exclusive)
 end
 
+do ENV "CleanupOnRemove"
+	World:set(Tags.CleanableComponent, JECS.OnAdd, function(e: JECS.Entity<any>, _)
+		World:set(e, JECS.OnRemove, function(entity: JECS.Entity<any>, _)
+			Cleanup(World:get(entity, e))
+		end)
+	end)
+end
+
 do ENV "ConsumerOf"
 	World:set(Tags.ConsumerOf, JECS.OnAdd, function(_, id, _)
 		if not JECS.IS_PAIR(id) then return end
@@ -49,6 +57,27 @@ do ENV "ConsumerOf"
 	--end)
 end
 
+do ENV "InScopeOf"
+	World:set(Tags.InScopeOf, JECS.OnAdd, function(scopable, id, _)
+		if not JECS.IS_PAIR(id) then return end
+
+		local scope = JECS.pair_second(World, id)
+		local cacheTable = World:get(scope, Components.CacheTable)
+		table.insert(cacheTable, scopable)
+	end)
+
+	World:set(Tags.InScopeOf, JECS.OnRemove, function(scopable, id, _)
+		if not JECS.IS_PAIR(id) then return end
+
+		local scope = JECS.pair_second(World, id)
+		local cacheTable = World:get(scope, Components.CacheTable)
+		local index = table.find(cacheTable, scopable)
+		if index then
+			table.remove(cacheTable, index)
+		end
+	end)
+end
+
 do ENV "State"
 	World:set(Components.State, JECS.OnChange, function(entity: JECS.Entity<any>, _, _)
 		if World:has(entity, Tags.Dirty) then return end
@@ -56,17 +85,13 @@ do ENV "State"
 		World:add(entity, Tags.Dirty)
 	end)
 
-	World:set(Components.State, JECS.OnRemove, function(entity: JECS.Entity<any>, _)
-		if World:has(entity, Tags.Cleanable) then
-			Cleanup(World:get(entity, Components.State))
-		end
-	end)
+	World:add(Components.State, Tags.CleanableComponent)
 end
 
+
 do ENV "Cache"
-	World:set(Components.Cache, JECS.OnRemove, function(entity: JECS.Entity<any>, id)
-		Cleanup(World:get(entity, Components.Cache))
-	end)
+	World:add(Components.Cache, Tags.CleanableComponent)
+	World:add(Components.CacheTable, Tags.CleanableComponent)
 end
 
 return module

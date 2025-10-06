@@ -3,10 +3,11 @@ local RootFolder = script.Parent.Parent
 local Core = RootFolder.Core
 local Definitions = RootFolder.Definitions
 
+local Components = require(Definitions.Components)
 local Tags = require(Definitions.Tags)
 local World = require(Core.World)
 
-local function cleanup<T>(thing: T, ...)
+local function cleanup(thing: any, ...)
 	local world = World
 
 	local typeOfSubject = typeof(thing)
@@ -16,10 +17,18 @@ local function cleanup<T>(thing: T, ...)
 		world:add(thing, Tags.Cleaning)
 		world:delete(thing)
 	elseif typeOfSubject == "table" then
-		if thing.entity then
-			if world:contains(thing.entity) then
-				world:add(thing.entity, Tags.Cleaning)
-				world:delete(thing.entity)
+		local entity = thing.entity
+		if entity then
+			if World:has(entity, Tags.Scope) then
+				local things = World:get(entity, Components.CacheTable)
+				for _, thing2 in things do
+					cleanup(thing2)
+				end
+
+				return
+			elseif world:contains(entity) then
+				world:add(entity, Tags.Cleaning)
+				world:delete(entity)
 			end
 		else
 			local method = thing.disconnect
@@ -28,19 +37,19 @@ local function cleanup<T>(thing: T, ...)
 				or thing.Destroy
 
 			if method and method ~= cleanup then
-				method(thing, ...)
+				method(thing)
 			end
-		end
 
-		if getmetatable(thing) then
-			setmetatable(thing, nil)
-			table.clear(thing)
+			if getmetatable(thing) then
+				setmetatable(thing, nil)
+				table.clear(thing)
 
-			return
-		end
+				return
+			end
 
-		for _, value in thing do
-			cleanup(value)
+			for _, value in thing do
+				cleanup(value)
+			end
 		end
 	elseif typeOfSubject == "Instance" then
 		thing:Destroy()

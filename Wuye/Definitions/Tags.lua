@@ -24,7 +24,7 @@ local Tags = {
 	DeleteBefore = JECS.tag(),
 	Previous = JECS.tag(),
 	Next = JECS.tag(),
-	Cleanable = JECS.tag(),
+	CleanableComponent = JECS.tag(),
 
 	--Hooks
 	OnChange = JECS.tag(),
