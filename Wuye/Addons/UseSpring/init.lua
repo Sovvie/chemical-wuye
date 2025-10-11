@@ -30,7 +30,7 @@ local function main(chemical: Wuye.Wuye & UseSpring<Wuye.Wuye>): UseSpring<Wuye.
 			chemical.set(springValue, newValue)
 		end)
 
-		scope.Effect(springValue, function(use)
+		scope:Changed(springValue, function(use)
 			spring:target(damp, freq, use(target))
 		end)
 
