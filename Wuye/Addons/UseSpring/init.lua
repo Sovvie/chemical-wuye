@@ -30,8 +30,8 @@ local function main(chemical: Wuye.Wuye & UseSpring<Wuye.Wuye>): UseSpring<Wuye.
 			chemical.set(springValue, newValue)
 		end)
 
-		scope:Changed(springValue, function(use)
-			spring:target(damp, freq, use(target))
+		scope.Changed(springValue, target, function(new)
+			spring:target(damp, freq, new)
 		end)
 
 		springValue.completed = function(callback: () -> ())
