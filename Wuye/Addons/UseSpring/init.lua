@@ -2,6 +2,7 @@ local RootFolder = script.Parent.Parent
 local Core = RootFolder.Core
 
 local JECS = require(Core.JECS)
+local Wuye = require(RootFolder)
 local Spr = require(script.Spr2)
 
 type State<T> = { get: () -> T, entity: JECS.Entity<T> }
@@ -14,10 +15,10 @@ type UseSpring<C> = C & {
 	)
 }
 
-local function main<C>(chemical: Scopable<C>): UseSpring<C>
-	local newSpr = function<T, S>(
-		scope: S,
-		target: { get: () -> T, entity: JECS.Entity<T> },
+local function main(chemical: Wuye.Wuye & UseSpring<Wuye.Wuye>): UseSpring<Wuye.Wuye>
+	local newSpr = function<T>(
+		scope: Wuye.Scopable<Wuye.Wuye>,
+		target: Wuye.State<T>,
 		freq: number,
 		damp: number
 	): { entity: JECS.Entity<T>, get: () -> T, stop: () -> (), completed: (callback: () -> ()) -> () }
@@ -25,7 +26,9 @@ local function main<C>(chemical: Scopable<C>): UseSpring<C>
 
 		local springValue = scope:State(initial)
 
-		local spring = Spr.value(initial, function(newValue) chemical.set(springValue, newValue) end)
+		local spring = Spr.value(initial, function(newValue)
+			chemical.set(springValue, newValue)
+		end)
 
 		scope.Effect(springValue, function(use)
 			spring:target(damp, freq, use(target))

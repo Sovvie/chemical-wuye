@@ -24,20 +24,27 @@ local Is = require(Utility.Is)
 
 export type Scopable<S> = S & {
 	entity: JECS.Entity<nil>,
+
+}
+export type Consumer<T> = {
+	entity: JECS.Entity<T>,
 }
 
 export type State<T> = {
 	entity: JECS.Entity<T>,
 	get: () -> T,
+	tag: (name: string, status: boolean?) -> (),
 }
 
 export type Computed<T> = {
 	entity: JECS.Entity<T>,
-	get: (Computed<T>) -> T
+	get: () -> T,
+	tag: (name: string, status: boolean?) -> (),
 }
 
 export type Effect = {
 	entity: JECS.Entity<() -> ()>,
+	tag: (name: string, status: boolean?) -> (),
 }
 
 export type Watch = {
@@ -63,11 +70,23 @@ local CollectionService = game:GetService("CollectionService")
 local COLLECTION_TAG = "Entity"
 local COLLECTION_IDENTITY_TAG = "ENTITY_"
 
+local RUNTIME_TAGS = {}
+
 local function IMMEDIATE_UPDATE(effect: Effect)
 	World:remove(effect.entity, Tags.Dirty)
 	do
 		(World:get(effect.entity, JECS.pair(Tags.OnUpdate, Components.Callback)) :: () -> ())()
 	end
+end
+
+local function GET_RUNTIME_TAG(tag: string): JECS.Entity
+	if RUNTIME_TAGS[tag] then
+		return RUNTIME_TAGS[tag]
+	end
+
+	local t = World:entity()
+	RUNTIME_TAGS[tag] = t
+	return t
 end
 
 -- ~~~~~~~~~~~~~~~~~~~~~
@@ -115,6 +134,13 @@ local function Set<T>(state: State<T>, value: T)
 	World:set(entity, Components.State, value)
 end
 
+local function Clean<S>(scope: { entity: JECS.Entity<any> })
+	local things = World:get(scope.entity, Components.CacheTable)
+	for _, thing in things do
+		Cleanup(thing)
+	end
+end
+
 local function Getter<T>(entity: JECS.Entity<T>): () -> T
 	local e= entity
 	local c = Components.State
@@ -123,6 +149,12 @@ local function Getter<T>(entity: JECS.Entity<T>): () -> T
 	end
 end
 
+local function Tagger(entity: JECS.Entity<any>): (name: string, status: boolean?) -> ()
+	local e= entity
+	return function(name: string, status: boolean?): ()
+		World[status ~= false and "add" or "remove"](World, e, GET_RUNTIME_TAG(name))
+	end
+end
 --TODO remake this
 --TODO use collection service and events to handle binding instances to entities.
 -- local function Bind(bindable: { entity: JECS.Entity }, parent: Instance | { entity: JECS.Entity })
@@ -142,7 +174,7 @@ end
 -- 	return { entity = entity }
 -- end
 
-local function Changed<S, T>(source: Scopable<S>, target: State<T>, callback: (new: T, old: T) -> ()): Effect
+local function Changed<S, T>(source: Scopable<S>, target: State<T>, callback: (new: T, old: T) -> ()): Consumer<(new: T, old: T) -> ()>
 	local entity = World:entity()
 	World:add(entity, Tags.Consumer)
 	World:add(entity, JECS.pair(Tags.RuntimeOf, Tags.React))
@@ -193,7 +225,8 @@ local function State<S, T>(scope: Scopable<Wuye>, initial: T): State<T>
 	return {
 		entity = entity,
 
-		get = Getter(entity)
+		get = Getter(entity),
+		tag = Tagger(entity)
 	}
 end
 
@@ -263,7 +296,9 @@ local function Effect<S>(scope: Scopable<Wuye>, callback: (use: Use) -> Cleanup<
 	World:add(entity, JECS.pair(Tags.InScopeOf, scope.entity))
 
 	return {
-		entity = entity
+		entity = entity,
+
+		tag = Tagger(entity)
 	}
 end
 
@@ -375,7 +410,7 @@ local Wuye =  {
 	remove = Remove,
 	delete = Delete,
 	scoped = Scoped,
-	cleanup = Cleanup,
+	clean = Clean,
 	
 	State = State,
 	
@@ -384,11 +419,12 @@ local Wuye =  {
 	Effect = Effect,
 	Render = Render,
 	Mapped = Mapped,
-
+	
 	Select = Select,
-
+	
 	Throttle = Throttle,
 	Debounce = Debounce,
+	Destroy = Cleanup,
 }
 
 export type Wuye = typeof(Wuye)

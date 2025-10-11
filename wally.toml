@@ -14,7 +14,7 @@ include = ["Wuye", "default.project.json", "LICENSE"]
 # shared-packages = "game.ReplicatedStorage.Packages"
 
 # [dependencies]
-# Chemical = "sovvie/wuye@0.3.4-1"
+# Chemical = "sovvie/wuye@0.3.5"
 # Promise = "evaera/promise@4.0.0"
 # Sift = "csqrl/sift@0.0.11"
 # # Spark = "nezuo/spark@0.3.1"

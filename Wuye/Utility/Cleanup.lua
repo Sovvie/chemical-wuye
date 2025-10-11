@@ -3,11 +3,10 @@ local RootFolder = script.Parent.Parent
 local Core = RootFolder.Core
 local Definitions = RootFolder.Definitions
 
-local Components = require(Definitions.Components)
 local Tags = require(Definitions.Tags)
 local World = require(Core.World)
 
-local function cleanup(thing: any, ...)
+local function cleanup(thing: any)
 	local world = World
 
 	local typeOfSubject = typeof(thing)
@@ -19,14 +18,7 @@ local function cleanup(thing: any, ...)
 	elseif typeOfSubject == "table" then
 		local entity = thing.entity
 		if entity then
-			if World:has(entity, Tags.Scope) then
-				local things = World:get(entity, Components.CacheTable)
-				for _, thing2 in things do
-					cleanup(thing2)
-				end
-
-				return
-			elseif world:contains(entity) then
+			if world:contains(entity) then
 				world:add(entity, Tags.Cleaning)
 				world:delete(entity)
 			end
@@ -56,7 +48,7 @@ local function cleanup(thing: any, ...)
 	elseif typeOfSubject == "RBXScriptConnection" then
 		thing:Disconnect()
 	elseif typeOfSubject == "function" then
-		thing(...)
+		thing()
 	elseif typeOfSubject == "thread" then
 		task.cancel(thing)
 	end
