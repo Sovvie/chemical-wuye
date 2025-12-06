@@ -27,11 +27,8 @@ return System.new({
 		for consumer, callback in DirtyOnChangeQuery:iter() do
 			World:remove(consumer, Tags.Dirty)
 			
-			local s = os.clock()
 			local target = World:target(consumer, Tags.ConsumerOf)
-
 			callback(World:get(target, Components.State), World:get(target, PREVIOUS_STATE_PAIR))
-			if World:has(target, Tags.Mapper) then print(os.clock() - s) end
 		end
 
 		for consumer, callback in DirtyEffectsQuery:iter() do
