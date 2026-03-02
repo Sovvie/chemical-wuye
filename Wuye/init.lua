@@ -356,32 +356,25 @@ local function Mapped<S, K, V, R>(
 
 	local clean = cleanup or Cleanup
 	local changed = Changed(scope, state, function(new, old)
-		local newTable = new
-		local oldTable =  old
-		local currentTable = World:get(object.entity, Components.State)
-
-
-		local futureTable = {}
-		for key, value in newTable do
-			if currentTable[key] and value == oldTable[key] then
-				futureTable[key] = currentTable[key]
-			else
-				futureTable[key] = callback(key, value)
-			end
-		end
-
-		local cleanupTable = {}
-		for key, _ in oldTable do
-			if not newTable[key] or newTable[key] ~= oldTable[key] then
-				table.insert(cleanupTable, currentTable[key])
-			end
-		end
-
-		for _, value in cleanupTable do
-			clean(value)
-		end
-
-		World:set(object.entity, Components.State, futureTable)
+	    local currentTable = World:get(object.entity, Components.State)
+	
+	    for key in old do
+	        if new[key] == nil or new[key] ~= old[key] then
+	            local cur = currentTable[key]
+	            if cur ~= nil then
+	                clean(cur)
+	            end
+	            currentTable[key] = nil
+	        end
+	    end
+	
+	    for key, value in new do
+	        if currentTable[key] == nil then
+	            currentTable[key] = callback(key, value)
+	        end
+	    end
+	
+	    World:set(object.entity, Components.State, currentTable)
 	end)
 
 	World:add(changed.entity, JECS.pair(Tags.DeleteBefore, object.entity))
