@@ -14,7 +14,7 @@ local Cleanup = require(Utility.Cleanup)
 
 local module = {}
 
-local function ENV(name: string) end
+local function ENV(_name: string) end
 
 do ENV "JECS Tags"
 	World:add(Tags.InScopeOf, JECS.pair(JECS.OnDeleteTarget, JECS.Delete))
@@ -63,6 +63,10 @@ do ENV "InScopeOf"
 
 		local scope = JECS.pair_second(World, id)
 		local cacheTable = World:get(scope, Components.CacheTable)
+		if cacheTable == nil then
+			cacheTable = {}
+			World:set(scope, Components.CacheTable, cacheTable)
+		end
 		table.insert(cacheTable, scopable)
 	end)
 
@@ -71,6 +75,9 @@ do ENV "InScopeOf"
 
 		local scope = JECS.pair_second(World, id)
 		local cacheTable = World:get(scope, Components.CacheTable)
+		if cacheTable == nil then
+			return
+		end
 		local index = table.find(cacheTable, scopable)
 		if index then
 			table.remove(cacheTable, index)

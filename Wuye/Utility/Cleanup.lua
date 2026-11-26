@@ -42,6 +42,8 @@ local function cleanup(thing: any)
 			for _, value in thing do
 				cleanup(value)
 			end
+
+			table.clear(thing)
 		end
 	elseif typeOfSubject == "Instance" then
 		thing:Destroy()

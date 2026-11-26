@@ -10,12 +10,11 @@ function module.Message(msg)
 	return #messages
 end
 
-return setmetatable(module, {
-	__index = module, --TODO test if needed
-	__call = function(self, depth: number, messageId: number, ...)
-		if IsStudio then
-			warn(messages[messageId], ...)
-			warn(debug.info(depth, "sln"))
-		end
-	end,
-}) :: { Message: (msg: string) -> number } & (depth: number, messageId: number, ...any) -> ()
+function module.Emit(depth: number, messageId: number, ...)
+	if IsStudio then
+		warn(messages[messageId], ...)
+		warn(debug.info(depth, "sln"))
+	end
+end
+
+return module

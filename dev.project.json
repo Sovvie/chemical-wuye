@@ -1,0 +1,12 @@
+{
+	"name": "Wuye",
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"Wuye": {
+				"$path": "Wuye"
+			}
+		}
+	}
+}

@@ -18,7 +18,7 @@ local DirtyEffectsQuery = World:query(JECS.pair(Tags.OnUpdate, Components.Callba
 return System.new({
 	Priority = System.Render,
 	
-	Process = function(dt: number)
+	Process = function(_dt: number)
 		for consumer, callback in DirtyEffectsQuery:iter() do
 			World:remove(consumer, Tags.Dirty)
 

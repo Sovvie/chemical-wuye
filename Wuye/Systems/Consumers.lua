@@ -23,12 +23,13 @@ local PREVIOUS_STATE_PAIR = JECS.pair(Tags.Previous, Components.State)
 return System.new({
 	Priority = System.React,
 	
-	Process = function(dt: number)
+	Process = function(_dt: number)
 		for consumer, callback in DirtyOnChangeQuery:iter() do
 			World:remove(consumer, Tags.Dirty)
 			
 			local target = World:target(consumer, Tags.ConsumerOf)
-			callback(World:get(target, Components.State), World:get(target, PREVIOUS_STATE_PAIR))
+			local newState, oldState = World:get(target, Components.State, PREVIOUS_STATE_PAIR)
+			callback(newState, oldState)
 		end
 
 		for consumer, callback in DirtyEffectsQuery:iter() do
